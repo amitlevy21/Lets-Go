@@ -4,8 +4,8 @@ import "time"
 
 type person struct {
 	firstName string
-	lastName string
-	age int16
+	lastName  string
+	age       int16
 }
 
 type role int
@@ -18,6 +18,6 @@ const (
 
 type crewMember struct {
 	person
-	cRole role
+	cRole        role
 	firstWorkDay time.Time
 }

@@ -13,10 +13,10 @@ const (
 )
 
 type vehicle struct {
-	vCategory category
-	manufactor string
+	vCategory      category
+	manufactor     string
 	manufactorDate time.Time
-	activeSince time.Time
-	capacity int
-	seats int
+	activeSince    time.Time
+	capacity       int
+	seats          int
 }
