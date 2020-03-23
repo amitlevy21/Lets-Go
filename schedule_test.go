@@ -2,11 +2,11 @@ package main
 
 import "testing"
 
-func TestCreateSchedule(t * testing.T) {
+func TestCreateSchedule(t *testing.T) {
 	s := schedule{
-		source: station{},
+		source:      station{},
 		destination: station{},
-		repeats: hourly,
+		repeats:     hourly,
 	}
 
 	t.Logf("schedule created! %v", s)
