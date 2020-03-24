@@ -11,6 +11,7 @@ const (
 )
 
 type schedule struct {
+	id                  int64
 	source              station
 	destination         station
 	duration            time.Time

@@ -18,6 +18,7 @@ const (
 
 type crewMember struct {
 	person
+	id           int64
 	cRole        role
 	firstWorkDay time.Time
 }
