@@ -7,7 +7,7 @@ func TestCreateOngoingRide(t *testing.T) {
 		rStatus:        pending,
 		numPassengers:  0,
 		availableSeats: 30,
-		crewMembersIds: []int64{1, 2, 3},
+		crewMembersIds: []uint64{1, 2, 3},
 		rVehicle:       vehicle{},
 		latestStation:  station{},
 	}

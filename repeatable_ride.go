@@ -1,7 +1,7 @@
 package main
 
 type repeatableRide struct {
-	id           int64
-	stationsIds  []int64
-	schedulesIds []int64
+	id           uint64
+	stationsIds  []uint64
+	schedulesIds []uint64
 }
