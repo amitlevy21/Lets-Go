@@ -9,11 +9,11 @@ const (
 )
 
 type ongoingRide struct {
-	id             int64
+	id             uint64
 	rStatus        status
 	numPassengers  int32
 	availableSeats int32
-	crewMembersIds []int64
+	crewMembersIds []uint64
 	rVehicle       vehicle
 	latestStation  station
 }
