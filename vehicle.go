@@ -13,6 +13,7 @@ const (
 )
 
 type vehicle struct {
+	id             int64
 	vCategory      category
 	manufactor     string
 	manufactorDate time.Time

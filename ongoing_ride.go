@@ -9,6 +9,7 @@ const (
 )
 
 type ongoingRide struct {
+	id             int64
 	rStatus        status
 	numPassengers  int32
 	availableSeats int32

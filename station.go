@@ -6,6 +6,7 @@ type coordinates struct {
 }
 
 type station struct {
+	id       int64
 	location coordinates
 	rideIds  []int64
 }
