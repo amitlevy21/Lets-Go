@@ -11,6 +11,12 @@ func TestCreateRepeatableRide(t *testing.T) {
 	t.Logf("Repeatable ride created! %v", rr)
 }
 
+func TestCreateRoute(t *testing.T) {
+	r := NewRoute()
+
+	t.Logf("Route created! %v", r)
+}
+
 func TestAddExistSchedule(t *testing.T) {
 	var scheduleID uint64 = 1
 	rr := repeatableRide{
