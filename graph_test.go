@@ -11,8 +11,7 @@ func TestCreateGraph(t *testing.T) {
 
 func TestBFSFromNonExistSrc(t *testing.T) {
 	g := NewGraph([]*myVertex{})
-	_, err := BFS(g, 1, func(v *myVertex) bool {return true})
-	if err == nil {
+	if _, err := BFS(g, 1, func(v *myVertex) bool {return true}); err == nil {
 		t.Error("Should not BFS when src node not in graph")
 	}
 }
@@ -52,7 +51,7 @@ var BFSTests = []struct {
 func TestBFS(t *testing.T) {
 	for _, tt := range BFSTests {
 		t.Run(tt.name, func(t *testing.T) {
-			var sum uint64 = 0
+			sum := uint64(0)
 			_, err := BFS(tt.g, tt.startVertexID, func(v *myVertex) bool {
 				t.Logf("Adding %d to sum %d", v.id, sum)
 				sum += v.id
@@ -69,8 +68,8 @@ func TestBFS(t *testing.T) {
 }
 
 func TestBFSEarlyStop(t *testing.T) {
-	g := NewGraph([]*myVertex{&myVertex{id: 1}})
-	var sum uint64 = 0
+	g := NewGraph([]*myVertex{&myVertex{id: 1}, &myVertex{id: 2}})
+	sum := uint64(0)
 	early, err := BFS(g, 1, func(v *myVertex) bool {
 		sum += v.id
 		return true

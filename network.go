@@ -23,12 +23,12 @@ func (n *Network) GetStation(id uint64) (station, error) {
 }
 
 // AddStation adds a vertex to the network
-func (n *Network) AddStation(s station) error {
+func (n *Network) AddStation(s *station) error {
 	return n.g.AddVertex(s.id, &myVertex{id: s.id})
 }
 
 // CheckReachability whether dst is reachable from src
-func (n *Network) CheckReachability(src station, dst station) (bool, error) {
+func (n *Network) CheckReachability(src *station, dst *station) (bool, error) {
 	if _, err := n.GetStation(src.id); err != nil {
 		errMsg := "Cannot check reachability. Source station %v not in network"
 		return false, fmt.Errorf(errMsg, src)
@@ -52,7 +52,7 @@ func (n *Network) CheckReachability(src station, dst station) (bool, error) {
 }
 
 // ConnectStations marks that dst staion is reachable from src station
-func (n *Network) ConnectStations(src station, dst station) error {
+func (n *Network) ConnectStations(src *station, dst *station) error {
 	if err := n.hackSyncVertexData(src, dst); err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func (n *Network) ConnectStations(src station, dst station) error {
 // Ugly hack need because there is no exported method from the graph
 // package so we can access the edges of a vertex.
 // The current method v.Edges() is not synced with internal struct data of the packaged
-func (n *Network) hackSyncVertexData(src station, dst station) error {
+func (n *Network) hackSyncVertexData(src *station, dst *station) error {
 	sv, err := n.g.GetVertex(src.id)
 	dv, err := n.g.GetVertex(dst.id)
 	if err != nil {
