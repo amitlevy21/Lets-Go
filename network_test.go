@@ -17,8 +17,8 @@ func TestGetNonExistStation(t *testing.T) {
 
 func TestAddDuplicateStation(t *testing.T) {
 	n := NewNetwork()
-	n.AddStation(station{id: 1})
-	err := n.AddStation(station{id: 1})
+	n.AddStation(&station{id: 1})
+	err := n.AddStation(&station{id: 1})
 	if err == nil {
 		t.Errorf("Cannot add duplicate station to same network")
 	}
@@ -26,7 +26,7 @@ func TestAddDuplicateStation(t *testing.T) {
 
 func TestAddStation(t *testing.T) {
 	n := NewNetwork()
-	err := n.AddStation(station{id: 1})
+	err := n.AddStation(&station{id: 1})
 	if err != nil {
 		t.Errorf("Error while adding station to network: %s", err)
 	}
@@ -38,11 +38,11 @@ func TestAddStation(t *testing.T) {
 
 func TestAddMultipleStations(t *testing.T) {
 	n := NewNetwork()
-	err := n.AddStation(station{id: 1})
+	err := n.AddStation(&station{id: 1})
 	if err != nil {
 		t.Error("Failed to add first station to network")
 	}
-	err = n.AddStation(station{id: 2})
+	err = n.AddStation(&station{id: 2})
 	if err != nil {
 		t.Error("Failed to add second station to network")
 	}
@@ -58,8 +58,8 @@ func TestAddMultipleStations(t *testing.T) {
 
 func TestReachFromNonExistSourceStation(t *testing.T) {
 	n := NewNetwork()
-	src := station{id: 1}
-	dst := station{id: 2}
+	src := &station{id: 1}
+	dst := &station{id: 2}
 
 	n.AddStation(dst)
 	reach, err := n.CheckReachability(src, dst)
@@ -70,8 +70,8 @@ func TestReachFromNonExistSourceStation(t *testing.T) {
 
 func TestReachFromNonExistDestinationStation(t *testing.T) {
 	n := NewNetwork()
-	src := station{id: 1}
-	dst := station{id: 2}
+	src := &station{id: 1}
+	dst := &station{id: 2}
 
 	n.AddStation(src)
 	reach, err := n.CheckReachability(src, dst)
@@ -85,8 +85,8 @@ func TestReachFromNonExistDestinationStation(t *testing.T) {
 
 func TestNotReach(t *testing.T) {
 	n := NewNetwork()
-	src := station{id: 1}
-	dst := station{id: 2}
+	src := &station{id: 1}
+	dst := &station{id: 2}
 
 	n.AddStation(src)
 	n.AddStation(dst)
@@ -101,8 +101,8 @@ func TestNotReach(t *testing.T) {
 
 func TestReachDirectly(t *testing.T) {
 	n := NewNetwork()
-	src := station{id: 1}
-	dst := station{id: 2}
+	src := &station{id: 1}
+	dst := &station{id: 2}
 
 	n.AddStation(src)
 	n.AddStation(dst)
@@ -119,9 +119,9 @@ func TestReachDirectly(t *testing.T) {
 
 func TestReachIndirectly(t *testing.T) {
 	n := NewNetwork()
-	src := station{id: 1}
-	mid := station{id: 2}
-	dst := station{id: 3}
+	src := &station{id: 1}
+	mid := &station{id: 2}
+	dst := &station{id: 3}
 
 	n.AddStation(src)
 	n.AddStation(mid)
@@ -140,8 +140,8 @@ func TestReachIndirectly(t *testing.T) {
 
 func TestConnectBetweenStationsNotExist(t *testing.T) {
 	n := NewNetwork()
-	src := station{id: 1}
-	dst := station{id: 2}
+	src := &station{id: 1}
+	dst := &station{id: 2}
 	err := n.ConnectStations(src, dst)
 	if err == nil {
 		t.Error("Expected not to connect between station that don't exist")
@@ -149,8 +149,8 @@ func TestConnectBetweenStationsNotExist(t *testing.T) {
 }
 func TestConnectBetweenStations(t *testing.T) {
 	n := NewNetwork()
-	src := station{id: 1}
-	dst := station{id: 2}
+	src := &station{id: 1}
+	dst := &station{id: 2}
 	n.AddStation(src)
 	n.AddStation(dst)
 	err := n.ConnectStations(src, dst)
