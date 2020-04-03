@@ -12,9 +12,9 @@ func NewNetwork() Network {
 	return Network{NewGraph([]*myVertex{})}
 }
 
-// GetStation returns the station from the network
+// Station returns the station from the network
 // returns error if the station doesn't exist
-func (n *Network) GetStation(id uint64) (station, error) {
+func (n *Network) Station(id uint64) (station, error) {
 	v, err := n.g.GetVertex(id)
 	if v == nil {
 		return station{}, fmt.Errorf("station %d not found in network", id)
@@ -29,11 +29,11 @@ func (n *Network) AddStation(s *station) error {
 
 // CheckReachability whether dst is reachable from src
 func (n *Network) CheckReachability(src *station, dst *station) (bool, error) {
-	if _, err := n.GetStation(src.id); err != nil {
+	if _, err := n.Station(src.id); err != nil {
 		errMsg := "Cannot check reachability. Source station %v not in network"
 		return false, fmt.Errorf(errMsg, src)
 	}
-	if _, err := n.GetStation(dst.id); err != nil {
+	if _, err := n.Station(dst.id); err != nil {
 		return false, nil
 	}
 	found := false

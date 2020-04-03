@@ -9,7 +9,7 @@ func TestCreateNetwork(t *testing.T) {
 
 func TestGetNonExistStation(t *testing.T) {
 	n := NewNetwork()
-	_, err := n.GetStation(1)
+	_, err := n.Station(1)
 	if err == nil {
 		t.Error("You cannot get a station that doesn't exist in the network")
 	}
@@ -30,7 +30,7 @@ func TestAddStation(t *testing.T) {
 	if err != nil {
 		t.Errorf("Error while adding station to network: %s", err)
 	}
-	s, err := n.GetStation(1)
+	s, err := n.Station(1)
 	if err != nil {
 		t.Errorf("Failed to get added station %v to network", s)
 	}
@@ -46,11 +46,11 @@ func TestAddMultipleStations(t *testing.T) {
 	if err != nil {
 		t.Error("Failed to add second station to network")
 	}
-	_, err = n.GetStation(1)
+	_, err = n.Station(1)
 	if err != nil {
 		t.Error("Failed to get first station")
 	}
-	_, err = n.GetStation(2)
+	_, err = n.Station(2)
 	if err != nil {
 		t.Error("Failed to get second station")
 	}
