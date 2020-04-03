@@ -51,6 +51,7 @@ var BFSTests = []struct {
 func TestBFS(t *testing.T) {
 	for _, tt := range BFSTests {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			sum := uint64(0)
 			_, err := BFS(tt.g, tt.startVertexID, func(v *myVertex) bool {
 				t.Logf("Adding %d to sum %d", v.id, sum)

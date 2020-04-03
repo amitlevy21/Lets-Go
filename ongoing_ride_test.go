@@ -122,6 +122,7 @@ var testCases = []spec{
 func TestRideStatus(t *testing.T) {
 	for _, tt := range testCases {
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
 			if err := fnFromStruct(tt.or, tt.fn); err != nil {
 				if !tt.fail {
 					t.Errorf("%s should not fail but it did. error %s", tt.name, err)
