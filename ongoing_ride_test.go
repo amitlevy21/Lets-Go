@@ -122,14 +122,15 @@ var testCases = []spec{
 func TestRideStatus(t *testing.T) {
 	for _, tt := range testCases {
 		t.Run(tt.name, func(t *testing.T) {
+			t2 := tt // store loop var, before changed by the for loop
 			t.Parallel()
-			if err := fnFromStruct(tt.or, tt.fn); err != nil {
-				if !tt.fail {
-					t.Errorf("%s should not fail but it did. error %s", tt.name, err)
+			if err := fnFromStruct(t2.or, t2.fn); err != nil {
+				if !t2.fail {
+					t.Errorf("%s should not fail but did. error: %s", t2.name, err)
 				}
 			}
-			if tt.expected != tt.or.rStatus {
-				t.Errorf("expected status %s but got %s", tt.expected, tt.or.rStatus)
+			if t2.expected != t2.or.rStatus {
+				t.Errorf("expected status %s but got %s", t2.expected, t2.or.rStatus)
 			}
 		})
 	}

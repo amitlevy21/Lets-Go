@@ -50,10 +50,11 @@ var BFSTests = []struct {
 
 func TestBFS(t *testing.T) {
 	for _, tt := range BFSTests {
+		t2 := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 			sum := uint64(0)
-			_, err := BFS(tt.g, tt.startVertexID, func(v *myVertex) bool {
+			_, err := BFS(t2.g, t2.startVertexID, func(v *myVertex) bool {
 				t.Logf("Adding %d to sum %d", v.id, sum)
 				sum += v.id
 				return false
@@ -61,8 +62,8 @@ func TestBFS(t *testing.T) {
 			if err != nil {
 				t.Errorf("BFS failed: %s", err)
 			}
-			if sum != tt.sum {
-				t.Errorf("Expected sum of visits %d, but got %d", tt.sum, sum)
+			if sum != t2.sum {
+				t.Errorf("Expected sum of visits %d, but got %d", t2.sum, sum)
 			}
 		})
 	}
