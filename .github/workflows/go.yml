@@ -28,9 +28,15 @@ jobs:
 
     - name: Build
       run: go build -v .
-    
+  
     - name: Test
       run: go test -v -coverprofile=coverage.out
     
     - name: Generate coverage file
       run: cat coverage.out
+    
+    - name: Codecov
+      uses: codecov/codecov-action@v1.0.6
+      with:
+        file: coverage.out
+        flags: unittests
