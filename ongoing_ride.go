@@ -47,6 +47,6 @@ func (or *ongoingRide) cancel() error {
 	return nil
 }
 
-func (s status) String() string{
+func (s status) String() string {
 	return statusStr[s]
 }

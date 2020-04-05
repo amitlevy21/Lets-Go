@@ -11,7 +11,7 @@ func TestCreateGraph(t *testing.T) {
 
 func TestBFSFromNonExistSrc(t *testing.T) {
 	g := NewGraph([]*myVertex{})
-	if _, err := BFS(g, 1, func(v *myVertex) bool {return true}); err == nil {
+	if _, err := BFS(g, 1, func(v *myVertex) bool { return true }); err == nil {
 		t.Error("Should not BFS when src node not in graph")
 	}
 }
