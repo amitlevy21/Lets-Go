@@ -1,88 +1,48 @@
 package main
 
-import "testing"
+import (
+	"testing"
 
-type neighbors = map[uint64]float64
+	"gonum.org/v1/gonum/graph"
+)
 
 func TestCreateGraph(t *testing.T) {
-	g := NewGraph([]*myVertex{&myVertex{id: 1}, &myVertex{id: 2}})
-	t.Logf("Graph %v created!", g)
-}
-
-func TestBFSFromNonExistSrc(t *testing.T) {
-	g := NewGraph([]*myVertex{})
-	if _, err := BFS(g, 1, func(v *myVertex) bool { return true }); err == nil {
-		t.Error("Should not BFS when src node not in graph")
+	g := NewGraph()
+	n1 := g.NewNode()
+	g.AddNode(n1)
+	n2 := g.NewNode()
+	g.AddNode(n2)
+	g.SetWeightedEdge(g.NewWeightedEdge(n1, n2, 5))
+	if !g.HasEdgeFromTo(n1.ID(), n2.ID()) {
+		t.Errorf("graph not created as expected")
+	} else {
+		t.Logf("graph %v created!", g)
 	}
 }
 
-var BFSTests = []struct {
-	name          string
-	g             *Graph
-	startVertexID uint64
-	sum           uint64
-}{
-	{
-		"Single vertex",
-		NewGraph([]*myVertex{&myVertex{id: 1}}),
-		1,
-		1,
-	},
-	{
-		"Single vertex with self pointing edge",
-		NewGraph([]*myVertex{&myVertex{id: 1, outTo: neighbors{1: 1.0}, inFrom: neighbors{1: 1.0}}}),
-		1,
-		1,
-	},
-	{
-		"Two unconnected vertices",
-		NewGraph([]*myVertex{&myVertex{id: 1}, &myVertex{id: 2}}),
-		1,
-		1,
-	},
-	{
-		"Two connected vertices",
-		NewGraph([]*myVertex{&myVertex{id: 1, outTo: neighbors{2: 1.0}}, &myVertex{id: 2}}),
-		1,
-		3,
-	},
-}
-
-func TestBFS(t *testing.T) {
-	for _, tt := range BFSTests {
-		t2 := tt
-		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
-			sum := uint64(0)
-			_, err := BFS(t2.g, t2.startVertexID, func(v *myVertex) bool {
-				t.Logf("Adding %d to sum %d", v.id, sum)
-				sum += v.id
-				return false
-			})
-			if err != nil {
-				t.Errorf("BFS failed: %s", err)
-			}
-			if sum != t2.sum {
-				t.Errorf("Expected sum of visits %d, but got %d", t2.sum, sum)
-			}
-		})
+func TestBFSFromNonExistSrc(t *testing.T) {
+	g := NewGraph()
+	if node := g.BFS(1, func(v graph.Node, depth int) bool { return true }); node != nil {
+		t.Error("should not BFS when src node not in graph")
 	}
 }
 
 func TestBFSEarlyStop(t *testing.T) {
-	g := NewGraph([]*myVertex{&myVertex{id: 1}, &myVertex{id: 2}})
-	sum := uint64(0)
-	early, err := BFS(g, 1, func(v *myVertex) bool {
-		sum += v.id
+	g := NewGraph()
+	n1 := g.NewNode()
+	g.AddNode(n1)
+	n2 := g.NewNode()
+	g.AddNode(n2)
+	g.SetWeightedEdge(g.NewWeightedEdge(n1, n2, 0))
+	sum := int64(0)
+	early := g.BFS(0, func(v graph.Node, depth int) bool {
+		sum += v.ID()
 		return true
 	})
-	if err != nil {
-		t.Error(err)
+	if early != n1 {
+		t.Error("expected to stop early")
 	}
-	if !early {
-		t.Error("Expected to stop early")
-	}
-	if sum != 1 {
-		t.Error("Did not iterate before early stopping")
+	if sum != 0 {
+		t.Error("did not iterate before early stopping")
 	}
 }

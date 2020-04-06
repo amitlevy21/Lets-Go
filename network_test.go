@@ -4,55 +4,56 @@ import "testing"
 
 func TestCreateNetwork(t *testing.T) {
 	n := NewNetwork()
-	t.Logf("Network created! %v", n)
+	t.Logf("network created! %v", n)
 }
 
 func TestGetNonExistStation(t *testing.T) {
 	n := NewNetwork()
 	_, err := n.Station(1)
 	if err == nil {
-		t.Error("You cannot get a station that doesn't exist in the network")
+		t.Error("cannot get a station that doesn't exist in the network")
 	}
 }
 
 func TestAddDuplicateStation(t *testing.T) {
 	n := NewNetwork()
-	n.AddStation(&station{id: 1})
-	err := n.AddStation(&station{id: 1})
+	s := &station{id: 1}
+	n.AddStation(s)
+	err := n.AddStation(s)
 	if err == nil {
-		t.Errorf("Cannot add duplicate station to same network")
+		t.Errorf("cannot add duplicate station to same network")
 	}
 }
 
 func TestAddStation(t *testing.T) {
 	n := NewNetwork()
-	err := n.AddStation(&station{id: 1})
+	err := n.AddStation(&station{id: 0})
 	if err != nil {
-		t.Errorf("Error while adding station to network: %s", err)
+		t.Errorf("error while adding station to network: %s", err)
 	}
-	s, err := n.Station(1)
+	s, err := n.Station(0)
 	if err != nil {
-		t.Errorf("Failed to get added station %v to network", s)
+		t.Errorf("failed to get added station %v to network", s)
 	}
 }
 
 func TestAddMultipleStations(t *testing.T) {
 	n := NewNetwork()
-	err := n.AddStation(&station{id: 1})
+	err := n.AddStation(&station{id: 0})
 	if err != nil {
-		t.Error("Failed to add first station to network")
+		t.Error("failed to add first station to network")
 	}
-	err = n.AddStation(&station{id: 2})
+	err = n.AddStation(&station{id: 1})
 	if err != nil {
-		t.Error("Failed to add second station to network")
+		t.Error("failed to add second station to network")
+	}
+	_, err = n.Station(0)
+	if err != nil {
+		t.Error("failed to get first station")
 	}
 	_, err = n.Station(1)
 	if err != nil {
-		t.Error("Failed to get first station")
-	}
-	_, err = n.Station(2)
-	if err != nil {
-		t.Error("Failed to get second station")
+		t.Error("failed to get second station")
 	}
 }
 
@@ -64,7 +65,7 @@ func TestReachFromNonExistSourceStation(t *testing.T) {
 	n.AddStation(dst)
 	reach, err := n.CheckReachability(src, dst)
 	if reach || err == nil {
-		t.Errorf("Should not be able to reach a source station that was not added to network")
+		t.Errorf("should not be able to reach a source station that was not added to network")
 	}
 }
 
@@ -76,10 +77,10 @@ func TestReachFromNonExistDestinationStation(t *testing.T) {
 	n.AddStation(src)
 	reach, err := n.CheckReachability(src, dst)
 	if err != nil {
-		t.Errorf("Expected to checkReachability without errors %s", err)
+		t.Errorf("expected to checkReachability without errors %s", err)
 	}
 	if reach {
-		t.Errorf("Expected to not reach without errors")
+		t.Errorf("expected to not reach without errors")
 	}
 }
 
@@ -92,10 +93,10 @@ func TestNotReach(t *testing.T) {
 	n.AddStation(dst)
 	reach, err := n.CheckReachability(src, dst)
 	if err != nil {
-		t.Errorf("Expected to checkReachability without errors %s", err)
+		t.Errorf("expected to checkReachability without errors %s", err)
 	}
 	if reach {
-		t.Errorf("Expected to not reach")
+		t.Errorf("expected to not reach")
 	}
 }
 
@@ -110,10 +111,10 @@ func TestReachDirectly(t *testing.T) {
 
 	reach, err := n.CheckReachability(src, dst)
 	if err != nil {
-		t.Errorf("Expected to checkReachability without errors %s", err)
+		t.Errorf("expected to checkReachability without errors %s", err)
 	}
 	if !reach {
-		t.Errorf("Expected to reach")
+		t.Errorf("expected to reach")
 	}
 }
 
@@ -131,10 +132,10 @@ func TestReachIndirectly(t *testing.T) {
 
 	reach, err := n.CheckReachability(src, dst)
 	if err != nil {
-		t.Errorf("Unexpected error %s", err)
+		t.Errorf("unexpected error %s", err)
 	}
 	if !reach {
-		t.Errorf("Expected to reach")
+		t.Errorf("expected to reach")
 	}
 }
 
@@ -144,7 +145,7 @@ func TestConnectBetweenStationsNotExist(t *testing.T) {
 	dst := &station{id: 2}
 	err := n.ConnectStations(src, dst)
 	if err == nil {
-		t.Error("Expected not to connect between station that don't exist")
+		t.Error("expected not to connect between station that don't exist")
 	}
 }
 func TestConnectBetweenStations(t *testing.T) {
@@ -155,10 +156,10 @@ func TestConnectBetweenStations(t *testing.T) {
 	n.AddStation(dst)
 	err := n.ConnectStations(src, dst)
 	if err != nil {
-		t.Error("Expect to connect stations")
+		t.Error("expect to connect stations")
 	}
 	reach, err := n.CheckReachability(src, dst)
 	if !reach || err != nil {
-		t.Error("Expected to reach after connected")
+		t.Error("expected to reach after connected")
 	}
 }

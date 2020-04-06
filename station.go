@@ -8,13 +8,13 @@ type coordinates struct {
 }
 
 type station struct {
-	id       uint64
+	id       int64
 	location coordinates
-	rideIds  map[uint64]bool
+	rideIds  map[int64]bool
 }
 
 // AddRide adds a ride to the station, returns error if rideId exists
-func (s *station) AddRide(rideID uint64) error {
+func (s *station) AddRide(rideID int64) error {
 	if s.rideIds[rideID] == true {
 		return fmt.Errorf("Cannot add rideID %d. Already exists", rideID)
 	}
