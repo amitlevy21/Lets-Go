@@ -60,7 +60,7 @@ func TestAddMultipleStations(t *testing.T) {
 	}
 	if s.id != 1 {
 		t.Errorf("expected id %d got %d", 1, s.id)
-}
+	}
 }
 
 func TestReachFromNonExistSourceStation(t *testing.T) {
@@ -178,5 +178,77 @@ func TestConnectBetweenStations(t *testing.T) {
 	reach, err := n.CheckReachability(src, dst)
 	if !reach || err != nil {
 		t.Error("expected to reach after connected")
+	}
+}
+
+func TestValidateEmptyRoute(t *testing.T) {
+	n := NewNetwork()
+	route := []int64{}
+	valid := n.ValidateRoute(route)
+	if valid {
+		t.Errorf("should not be valid")
+	}
+}
+
+func TestValidateRouteStartNotExist(t *testing.T) {
+	n := NewNetwork()
+	route := []int64{1}
+	valid := n.ValidateRoute(route)
+	if valid {
+		t.Errorf("should return error stating the route is invalid")
+	}
+}
+
+
+func TestValidateUnreachable(t *testing.T) {
+	n := NewNetwork()
+	s1 := &station{id: 1}
+	s2 := &station{id: 2}
+	n.AddStation(s1)
+	n.AddStation(s2)
+	route := []int64{s1.id, s2.id}
+	valid := n.ValidateRoute(route)
+	if valid {
+		t.Errorf("expected route to be valid")
+	}
+}
+
+func TestValidateRoute(t *testing.T) {
+	n := NewNetwork()
+	s1 := &station{id: 1}
+	s2 := &station{id: 2}
+	s3 := &station{id: 3}
+	s4 := &station{id: 4}
+	n.AddStation(s1)
+	n.AddStation(s2)
+	n.AddStation(s3)
+	n.AddStation(s4)
+	n.ConnectStations(s1, s2)
+	n.ConnectStations(s2, s3)
+	n.ConnectStations(s2, s4)
+	route := []int64{s1.id, s2.id, s3.id}
+	valid := n.ValidateRoute(route)
+	if !valid {
+		t.Errorf("expected route to be valid")
+	}
+}
+
+func TestValidateDirectRoute(t *testing.T) {
+	n := NewNetwork()
+	s1 := &station{id: 1}
+	s2 := &station{id: 2}
+	s3 := &station{id: 3}
+	s4 := &station{id: 4}
+	n.AddStation(s1)
+	n.AddStation(s2)
+	n.AddStation(s3)
+	n.AddStation(s4)
+	n.ConnectStations(s1, s2)
+	n.ConnectStations(s2, s3)
+	n.ConnectStations(s2, s4)
+	route := []int64{s1.id, s2.id, s4.id}
+	valid := n.ValidateRoute(route)
+	if !valid {
+		t.Errorf("expected route to be valid")
 	}
 }

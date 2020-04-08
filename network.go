@@ -71,3 +71,30 @@ func (n *Network) ConnectStations(src *station, dst *station) error {
 	n.g.SetWeightedEdge(n.g.NewWeightedEdge(nSrc, nDst, 0))
 	return nil
 }
+
+// ValidateRoute checks if the given route is visitable in the given order.
+func (n *Network) ValidateRoute(route []int64) bool {
+	if len(route) == 0 {
+		return false
+	}
+	if !n.allStationExist(route) {
+		return false
+	}
+	for i, r := range route[1:] {
+		reach, err := n.CheckReachability(&station{id: route[i]}, &station{id: r})
+		if err != nil || !reach {
+			return false
+		}
+	}
+	return true
+}
+
+func (n *Network) allStationExist(ids []int64) bool {
+	for _, id := range ids {
+		_, err := n.Station(id)
+		if err != nil {
+			return false
+		}
+	}
+	return true
+}
