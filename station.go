@@ -7,6 +7,7 @@ type coordinates struct {
 	y float64
 }
 
+// TODO: Add NewStation function to unsure unique id
 type station struct {
 	id       int64
 	location coordinates
