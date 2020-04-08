@@ -1,28 +1,24 @@
 package main
 
-import (
-	"fmt"
-	"github.com/starwander/goraph"
-)
-
-// Route is a graph where the edges are station and the vertices are durations
-type Route *goraph.Graph
+import "fmt"
 
 type repeatableRide struct {
-	id           uint64
-	stationsIds  []uint64
-	schedulesIds map[uint64]bool
+	id          int64
+	stationsIds []int64
 }
 
-// NewRoute creates a route
-func NewRoute() Route {
-	return goraph.NewGraph()
-}
-
-func (rr *repeatableRide) AddSchedule(scheduleID uint64) error {
-	if rr.schedulesIds[scheduleID] == true {
-		return fmt.Errorf("Schedule with id %d already exists", scheduleID)
+func (rr *repeatableRide) AddStation(stationID int64) error {
+	last := rr.stationsIds[len(rr.stationsIds)-1]
+	if err := checkStationToItself(last, stationID); err != nil {
+		return err
 	}
-	rr.schedulesIds[scheduleID] = true
+	rr.stationsIds = append(rr.stationsIds, stationID)
+	return nil
+}
+
+func checkStationToItself(src int64, dst int64) error {
+	if src == dst {
+		return fmt.Errorf("cannot go from station %d to itself", dst)
+	}
 	return nil
 }

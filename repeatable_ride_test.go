@@ -3,44 +3,27 @@ package main
 import "testing"
 
 func TestCreateRepeatableRide(t *testing.T) {
-	rr := repeatableRide{
-		stationsIds:  []uint64{1, 2, 3},
-		schedulesIds: map[uint64]bool{1: true, 2: true, 3: true},
-	}
-
-	t.Logf("Repeatable ride created! %v", rr)
+	rr := repeatableRide{stationsIds: []int64{1, 2, 3}}
+	t.Logf("repeatable created %#v", rr)
 }
 
-func TestCreateRoute(t *testing.T) {
-	r := NewRoute()
-
-	t.Logf("Route created! %v", r)
-}
-
-func TestAddExistSchedule(t *testing.T) {
-	var scheduleID uint64 = 1
-	rr := repeatableRide{
-		stationsIds:  []uint64{1, 2, 3},
-		schedulesIds: map[uint64]bool{scheduleID: true, 2: true, 3: true},
-	}
-
-	err := rr.AddSchedule(scheduleID)
+func TestEqualConsecutiveStaions(t *testing.T) {
+	var stationID = int64(3)
+	rr := repeatableRide{stationsIds: []int64{1, 2, 3}}
+	err := rr.AddStation(stationID)
 	if err == nil {
-		t.Error("Adding a schedule with the same id is forbidden")
+		t.Error("adding same station twice in a row is forbidden")
 	}
 }
 
-func TestAddSchedule(t *testing.T) {
-	var scheduleID uint64 = 2
-	rr := repeatableRide{
-		stationsIds:  []uint64{1, 2, 3},
-		schedulesIds: map[uint64]bool{1: true},
-	}
-	err := rr.AddSchedule(scheduleID)
+func TestAddStationToRide(t *testing.T) {
+	var stationID = int64(2)
+	rr := repeatableRide{stationsIds: []int64{1, 2, 3}}
+	err := rr.AddStation(stationID)
 	if err != nil {
-		t.Errorf("Error while adding schedule to ride: %s", err)
+		t.Errorf("error while adding station to ride: %s", err)
 	}
-	if rr.schedulesIds[scheduleID] != true {
-		t.Errorf("Schedule id %d was not added to ride", scheduleID)
+	if rr.stationsIds[len(rr.stationsIds)-1] != stationID {
+		t.Errorf("station id %d was not added to ride", stationID)
 	}
 }
