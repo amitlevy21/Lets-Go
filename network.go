@@ -65,6 +65,9 @@ func (n *Network) ConnectStations(src *station, dst *station) error {
 	if nSrc == nil || nDst == nil {
 		return fmt.Errorf("cannot connect stations %v to %v", nSrc, nDst)
 	}
+	if nSrc.ID() == nDst.ID() {
+		return fmt.Errorf("cannot connect station to itself. ID: %d", nSrc.ID())
+	}
 	n.g.SetWeightedEdge(n.g.NewWeightedEdge(nSrc, nDst, 0))
 	return nil
 }

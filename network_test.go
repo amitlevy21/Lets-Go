@@ -47,14 +47,20 @@ func TestAddMultipleStations(t *testing.T) {
 	if err != nil {
 		t.Error("failed to add second station to network")
 	}
-	_, err = n.Station(0)
+	s, err := n.Station(0)
 	if err != nil {
 		t.Error("failed to get first station")
 	}
-	_, err = n.Station(1)
+	if s.id != 0 {
+		t.Errorf("expected id %d got %d", 0, s.id)
+	}
+	s, err = n.Station(1)
 	if err != nil {
 		t.Error("failed to get second station")
 	}
+	if s.id != 1 {
+		t.Errorf("expected id %d got %d", 1, s.id)
+}
 }
 
 func TestReachFromNonExistSourceStation(t *testing.T) {
@@ -148,6 +154,17 @@ func TestConnectBetweenStationsNotExist(t *testing.T) {
 		t.Error("expected not to connect between station that don't exist")
 	}
 }
+
+func TestConnectStationToItself(t *testing.T) {
+	n := NewNetwork()
+	src := &station{id: 1}
+	n.AddStation(src)
+	err := n.ConnectStations(src, src)
+	if err == nil {
+		t.Error("expected not to connect to itself")
+	}
+}
+
 func TestConnectBetweenStations(t *testing.T) {
 	n := NewNetwork()
 	src := &station{id: 1}
