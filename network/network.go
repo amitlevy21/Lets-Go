@@ -56,7 +56,7 @@ func (n *Network) CheckReachability(src *Station, dst *Station) (bool, error) {
 
 // ConnectStations marks that dst staion is reachable from src station.
 // returns error if src or dst are nil.
-func (n *Network) ConnectStations(src *Station, dst *Station) error {
+func (n *Network) ConnectStations(src, dst *Station, duration float64) error {
 	nSrc := n.g.Node(src.id)
 	nDst := n.g.Node(dst.id)
 	if nSrc == nil || nDst == nil {
@@ -65,7 +65,10 @@ func (n *Network) ConnectStations(src *Station, dst *Station) error {
 	if nSrc.ID() == nDst.ID() {
 		return fmt.Errorf("cannot connect station to itself. ID: %d", nSrc.ID())
 	}
-	n.g.SetWeightedEdge(n.g.NewWeightedEdge(nSrc, nDst, 0))
+	if duration < 0 {
+		return fmt.Errorf("duration must be non negative. got: %f", duration)
+	}
+	n.g.SetWeightedEdge(n.g.NewWeightedEdge(nSrc, nDst, duration))
 	return nil
 }
 

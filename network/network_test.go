@@ -109,7 +109,7 @@ func TestReachDirectly(t *testing.T) {
 
 	failIfError(t, n.AddStation(src))
 	failIfError(t, n.AddStation(dst))
-	failIfError(t, n.ConnectStations(src, dst))
+	failIfError(t, n.ConnectStations(src, dst, 0))
 
 	reach, err := n.CheckReachability(src, dst)
 	failIfError(t, err)
@@ -127,8 +127,8 @@ func TestReachIndirectly(t *testing.T) {
 	failIfError(t, n.AddStation(src))
 	failIfError(t, n.AddStation(mid))
 	failIfError(t, n.AddStation(dst))
-	failIfError(t, n.ConnectStations(src, mid))
-	failIfError(t, n.ConnectStations(mid, dst))
+	failIfError(t, n.ConnectStations(src, mid, 0))
+	failIfError(t, n.ConnectStations(mid, dst, 0))
 
 	reach, err := n.CheckReachability(src, dst)
 	failIfError(t, err)
@@ -141,7 +141,7 @@ func TestConnectBetweenStationsNotExist(t *testing.T) {
 	n := NewNetwork()
 	src := &Station{id: 1}
 	dst := &Station{id: 2}
-	err := n.ConnectStations(src, dst)
+	err := n.ConnectStations(src, dst, 0)
 	if err == nil {
 		t.Error("expected not to connect between station that don't exist")
 	}
@@ -151,9 +151,21 @@ func TestConnectStationToItself(t *testing.T) {
 	n := NewNetwork()
 	src := &Station{id: 1}
 	failIfError(t, n.AddStation(src))
-	err := n.ConnectStations(src, src)
+	err := n.ConnectStations(src, src, 0)
 	if err == nil {
 		t.Error("expected not to connect to itself")
+	}
+}
+
+func TestSetConnectStationNegDuration(t *testing.T) {
+	n := NewNetwork()
+	s1 := &Station{id: 1}
+	s2 := &Station{id: 2}
+	failIfError(t, n.AddStation(s1))
+	failIfError(t, n.AddStation(s2))
+	err := n.ConnectStations(s1, s2, -1)
+	if err == nil {
+		t.Error("should not accept negative duration")
 	}
 }
 
@@ -163,7 +175,7 @@ func TestConnectBetweenStations(t *testing.T) {
 	dst := &Station{id: 2}
 	failIfError(t, n.AddStation(src))
 	failIfError(t, n.AddStation(dst))
-	failIfError(t, n.ConnectStations(src, dst))
+	failIfError(t, n.ConnectStations(src, dst, 1))
 	reach, err := n.CheckReachability(src, dst)
 	failIfError(t, err)
 	if !reach {
@@ -213,9 +225,9 @@ func TestValidateRoute(t *testing.T) {
 	failIfError(t, n.AddStation(s2))
 	failIfError(t, n.AddStation(s3))
 	failIfError(t, n.AddStation(s4))
-	failIfError(t, n.ConnectStations(s1, s2))
-	failIfError(t, n.ConnectStations(s2, s3))
-	failIfError(t, n.ConnectStations(s2, s4))
+	failIfError(t, n.ConnectStations(s1, s2, 0))
+	failIfError(t, n.ConnectStations(s2, s3, 0))
+	failIfError(t, n.ConnectStations(s2, s4, 0))
 	route := []int64{s1.id, s2.id, s3.id}
 	valid := n.ValidateRoute(route)
 	if !valid {
@@ -233,9 +245,9 @@ func TestValidateDirectRoute(t *testing.T) {
 	failIfError(t, n.AddStation(s2))
 	failIfError(t, n.AddStation(s3))
 	failIfError(t, n.AddStation(s4))
-	failIfError(t, n.ConnectStations(s1, s2))
-	failIfError(t, n.ConnectStations(s2, s3))
-	failIfError(t, n.ConnectStations(s2, s4))
+	failIfError(t, n.ConnectStations(s1, s2, 0))
+	failIfError(t, n.ConnectStations(s2, s3, 0))
+	failIfError(t, n.ConnectStations(s2, s4, 0))
 	route := []int64{s1.id, s2.id, s4.id}
 	valid := n.ValidateRoute(route)
 	if !valid {
