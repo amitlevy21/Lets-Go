@@ -16,7 +16,7 @@ type station struct {
 
 // AddRide adds a ride to the station, returns error if rideId exists
 func (s *station) AddRide(rideID int64) error {
-	if s.rideIds[rideID] == true {
+	if s.rideIds[rideID] {
 		return fmt.Errorf("Cannot add rideID %d. Already exists", rideID)
 	}
 	s.rideIds[rideID] = true

@@ -48,10 +48,7 @@ func (n *Network) CheckReachability(src *station, dst *station) (bool, error) {
 		return false, nil
 	}
 	found := n.g.BFS(src.id, func(node graph.Node, depth int) bool {
-		if node.ID() == dst.id {
-			return true
-		}
-		return false
+		return node.ID() == dst.id
 	})
 
 	return found != nil, nil
