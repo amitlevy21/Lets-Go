@@ -1,4 +1,4 @@
-package main
+package ride
 
 import (
 	"fmt"
@@ -7,20 +7,20 @@ import (
 
 type spec struct {
 	name     string
-	or       *ongoingRide
+	or       *planned
 	fn       string
 	expected status
 	fail     bool
 }
 
 func TestCreateOngoingRide(t *testing.T) {
-	or := ongoingRide{
+	or := planned{
 		rStatus:        pending,
 		numPassengers:  0,
 		availableSeats: 30,
 		crewMembersIds: []uint64{1, 2, 3},
-		rVehicle:       vehicle{},
-		latestStation:  station{},
+		vehicle:       int64(0),
+		latestStation:  int64(0),
 	}
 	t.Logf("Ongoing ride created! %v", or)
 }
@@ -28,91 +28,91 @@ func TestCreateOngoingRide(t *testing.T) {
 var testCases = []spec{
 	{
 		"newly with pending status",
-		&ongoingRide{},
+		&planned{},
 		"",
 		pending,
 		false,
 	},
 	{
 		"start already started",
-		&ongoingRide{rStatus: ongoing},
+		&planned{rStatus: ongoing},
 		"start",
 		ongoing,
 		true,
 	},
 	{
 		"start finished ride",
-		&ongoingRide{rStatus: finished},
+		&planned{rStatus: finished},
 		"start",
 		finished,
 		true,
 	},
 	{
 		"start cancelled ride",
-		&ongoingRide{rStatus: cancelled},
+		&planned{rStatus: cancelled},
 		"start",
 		cancelled,
 		true,
 	},
 	{
 		"start pending ride",
-		&ongoingRide{},
+		&planned{},
 		"start",
 		ongoing,
 		false,
 	},
 	{
 		"finish finished ride",
-		&ongoingRide{rStatus: finished},
+		&planned{rStatus: finished},
 		"finish",
 		finished,
 		true,
 	},
 	{
 		"finish pending ride",
-		&ongoingRide{},
+		&planned{},
 		"finish",
 		finished,
 		false,
 	},
 	{
 		"finish cancelled ride",
-		&ongoingRide{rStatus: cancelled},
+		&planned{rStatus: cancelled},
 		"finish",
 		cancelled,
 		true,
 	},
 	{
 		"finish ongoing ride",
-		&ongoingRide{rStatus: ongoing},
+		&planned{rStatus: ongoing},
 		"finish",
 		finished,
 		false,
 	},
 	{
 		"cancel pending ride",
-		&ongoingRide{rStatus: pending},
+		&planned{rStatus: pending},
 		"cancel",
 		cancelled,
 		false,
 	},
 	{
 		"cancel finished ride",
-		&ongoingRide{rStatus: finished},
+		&planned{rStatus: finished},
 		"cancel",
 		cancelled,
 		false,
 	},
 	{
 		"cancel ongoing ride",
-		&ongoingRide{rStatus: ongoing},
+		&planned{rStatus: ongoing},
 		"cancel",
 		cancelled,
 		false,
 	},
 	{
 		"cancel cancelled ride",
-		&ongoingRide{rStatus: cancelled},
+		&planned{rStatus: cancelled},
 		"cancel",
 		cancelled,
 		false,
@@ -136,7 +136,7 @@ func TestRideStatus(t *testing.T) {
 	}
 }
 
-func fnFromStruct(or *ongoingRide, fn string) error {
+func fnFromStruct(or *planned, fn string) error {
 	switch fn {
 	case "start":
 		return or.start()

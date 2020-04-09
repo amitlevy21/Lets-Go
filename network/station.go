@@ -1,4 +1,4 @@
-package main
+package network
 
 import "fmt"
 
@@ -7,15 +7,16 @@ type coordinates struct {
 	y float64
 }
 
+// Station is a stop for a ride
 // TODO: Add NewStation function to unsure unique id
-type station struct {
+type Station struct {
 	id       int64
 	location coordinates
 	rideIds  map[int64]bool
 }
 
 // AddRide adds a ride to the station, returns error if rideId exists
-func (s *station) AddRide(rideID int64) error {
+func (s *Station) AddRide(rideID int64) error {
 	if s.rideIds[rideID] {
 		return fmt.Errorf("Cannot add rideID %d. Already exists", rideID)
 	}

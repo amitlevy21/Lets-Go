@@ -1,4 +1,4 @@
-package main
+package ride
 
 import "time"
 
@@ -11,9 +11,9 @@ const (
 )
 
 type schedule struct {
-	id                  uint64
-	source              station
-	destination         station
+	id                  int64
+	stationStartID      int64
+	stationFinishID     int64
 	duration            time.Time
 	leaveFromSource     time.Time
 	arriveAtDestination time.Time
