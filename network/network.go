@@ -39,7 +39,7 @@ func (n *Network) AddStation(s *Station) error {
 }
 
 // CheckReachability whether dst is reachable from src
-func (n *Network) CheckReachability(src *Station, dst *Station) (bool, error) {
+func (n *Network) CheckReachability(src, dst *Station) (bool, error) {
 	if _, err := n.Station(src.id); err != nil {
 		errMsg := "cannot check reachability. Source station %v not in network"
 		return false, fmt.Errorf(errMsg, src)

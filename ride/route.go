@@ -2,17 +2,17 @@ package ride
 
 import "fmt"
 
-type repeatableRide struct {
+type route struct {
 	id          int64
 	stationsIds []int64
 }
 
-func (rr *repeatableRide) AddStation(stationID int64) error {
-	last := rr.stationsIds[len(rr.stationsIds)-1]
+func (r *route) AddStation(stationID int64) error {
+	last := r.stationsIds[len(r.stationsIds)-1]
 	if err := checkStationToItself(last, stationID); err != nil {
 		return err
 	}
-	rr.stationsIds = append(rr.stationsIds, stationID)
+	r.stationsIds = append(r.stationsIds, stationID)
 	return nil
 }
 
