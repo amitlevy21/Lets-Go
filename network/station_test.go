@@ -1,9 +1,9 @@
-package main
+package network
 
 import "testing"
 
 func TestCreateStation(t *testing.T) {
-	s := station{
+	s := Station{
 		location: coordinates{
 			x: 16.5,
 			y: 17.5,
@@ -16,7 +16,7 @@ func TestCreateStation(t *testing.T) {
 
 func TestAddExistRide(t *testing.T) {
 	var rideID = int64(1)
-	s := station{
+	s := Station{
 		location: coordinates{
 			x: 16.5,
 			y: 17.5,
@@ -32,7 +32,7 @@ func TestAddExistRide(t *testing.T) {
 }
 
 func TestAddRide(t *testing.T) {
-	s := station{
+	s := Station{
 		location: coordinates{
 			x: 16.5,
 			y: 17.5,

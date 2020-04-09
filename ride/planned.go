@@ -1,4 +1,4 @@
-package main
+package ride
 
 import "fmt"
 
@@ -13,17 +13,17 @@ const (
 
 var statusStr = []string{"pending", "ongoing", "finished", "cancelled"}
 
-type ongoingRide struct {
+type planned struct {
 	id             uint64
 	rStatus        status
 	numPassengers  int32
 	availableSeats int32
 	crewMembersIds []uint64
-	rVehicle       vehicle
-	latestStation  station
+	vehicle        int64
+	latestStation  int64
 }
 
-func (or *ongoingRide) start() error {
+func (or *planned) start() error {
 	if or.rStatus != pending {
 		return fmt.Errorf("ride already started")
 	}
@@ -31,7 +31,7 @@ func (or *ongoingRide) start() error {
 	return nil
 }
 
-func (or *ongoingRide) finish() error {
+func (or *planned) finish() error {
 	if or.rStatus == finished {
 		return fmt.Errorf("ride already finished")
 	}
@@ -42,7 +42,7 @@ func (or *ongoingRide) finish() error {
 	return nil
 }
 
-func (or *ongoingRide) cancel() error {
+func (or *planned) cancel() error {
 	or.rStatus = cancelled
 	return nil
 }

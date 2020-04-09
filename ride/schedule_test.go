@@ -1,13 +1,12 @@
-package main
+package ride
 
 import "testing"
 
 func TestCreateSchedule(t *testing.T) {
 	s := schedule{
-		source:      station{},
-		destination: station{},
-		repeats:     hourly,
+		stationStartID:  int64(0),
+		stationFinishID: int64(1),
+		repeats:         hourly,
 	}
-
 	t.Logf("schedule created! %v", s)
 }

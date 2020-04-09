@@ -1,4 +1,4 @@
-module github.com/amitlevy21/transportation
+module github.com/amitlevy21/lets-go
 
 go 1.14
 
