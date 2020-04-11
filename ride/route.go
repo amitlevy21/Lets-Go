@@ -19,8 +19,8 @@ func (r *route) AddStation(stationID int64, a stationAdder) error {
 	if err := checkStationToItself(last, stationID); err != nil {
 		return err
 	}
-	// TODO: create error handling types
-	// BODY: use types like stationExist for more readable and relyable checks
+	// TODO create error handling types
+	// BODY use types like stationExist for more readable and relyable checks
 	if err := a.AddStation(stationID); err != nil && !strings.Contains(err.Error(), "exist") {
 		return err
 	}

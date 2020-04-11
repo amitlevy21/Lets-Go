@@ -8,7 +8,7 @@ type coordinates struct {
 }
 
 // Station is a stop for a ride
-// TODO: Add NewStation function to unsure unique id
+// TODO Add NewStation function to unsure unique id
 type Station struct {
 	id       int64
 	location coordinates
