@@ -11,7 +11,7 @@ func TestCreateRide(t *testing.T) {
 		numPassengers:  0,
 		availableSeats: 30,
 		crewMembersIds: []int64{1, 2, 3},
-		vehicle:       int64(0),
+		vehicle:        int64(0),
 		latestStation:  int64(0),
 	}
 	t.Logf("ride created! %v", r)

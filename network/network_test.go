@@ -167,7 +167,7 @@ func TestConnectBetweenStations(t *testing.T) {
 func TestValidateEmptyRoute(t *testing.T) {
 	n := NewNetwork()
 	route := []int64{}
-	if valid , _:= n.ValidateRoute(route); valid {
+	if valid, _ := n.ValidateRoute(route); valid {
 		t.Errorf("should not be valid")
 	}
 }
@@ -179,7 +179,6 @@ func TestValidateRouteStartNotExist(t *testing.T) {
 		t.Errorf("should return error stating the route is invalid")
 	}
 }
-
 
 func TestValidateUnreachable(t *testing.T) {
 	n := NewNetwork()
