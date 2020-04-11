@@ -8,47 +8,43 @@ import (
 
 // Network is a graph of stations
 type Network struct {
-	g *Graph
+	g    *Graph
+	sToN map[int64]int64
 }
 
 // NewNetwork creates a network
 func NewNetwork() Network {
-	return Network{NewGraph()}
+	return Network{NewGraph(), make(map[int64]int64)}
 }
 
-// Station returns the station from the network
-// returns error if the station doesn't exist
-func (n *Network) Station(id int64) (Station, error) {
-	v := n.g.Node(id)
-	if v == nil {
-		return Station{}, fmt.Errorf("station %d not found in network", id)
-	}
-	return Station{id: v.ID()}, nil
+// Get returns the corresponding nodeID created when stationID was added.
+func (n *Network) Get(stationID int64) (nodeID int64, ok bool) {
+	nodeID, ok = n.sToN[stationID]
+	return nodeID, ok
 }
 
 // AddStation adds a station to the network, returns error if the station already exist
-func (n *Network) AddStation(s *Station) error {
-	if exist := n.g.Node(s.id); exist != nil {
-		return fmt.Errorf("station %#v already exist", exist)
+func (n *Network) AddStation(id int64) error {
+	if _, ok := n.Get(id); ok {
+		return fmt.Errorf("station %d already exist", id)
 	}
 	node := n.g.NewNode()
-	s.id = node.ID()
 	n.g.AddNode(node)
+	n.sToN[id] = node.ID()
 
 	return nil
 }
 
 // CheckReachability whether dst is reachable from src
-func (n *Network) CheckReachability(src, dst *Station) (bool, error) {
-	if _, err := n.Station(src.id); err != nil {
-		errMsg := "cannot check reachability. Source station %v not in network"
-		return false, fmt.Errorf(errMsg, src)
+func (n *Network) CheckReachability(srcID, dstID int64) (bool, error) {
+	if src, ok := n.Get(srcID); !ok {
+		return false, fmt.Errorf("reachability: src %d not exist", src)
 	}
-	if _, err := n.Station(dst.id); err != nil {
+	if _, ok := n.Get(dstID); !ok {
 		return false, nil
 	}
-	found := n.g.BFS(src.id, func(node graph.Node, depth int) bool {
-		return node.ID() == dst.id
+	found := n.g.BFS(n.sToN[srcID], func(node graph.Node, depth int) bool {
+		return node.ID() == n.sToN[dstID]
 	})
 
 	return found != nil, nil
@@ -56,9 +52,9 @@ func (n *Network) CheckReachability(src, dst *Station) (bool, error) {
 
 // ConnectStations marks that dst staion is reachable from src station.
 // returns error if src or dst are nil.
-func (n *Network) ConnectStations(src, dst *Station, duration float64) error {
-	nSrc := n.g.Node(src.id)
-	nDst := n.g.Node(dst.id)
+func (n *Network) ConnectStations(srcID, dstID int64, duration float64) error {
+	nSrc := n.g.Node(n.sToN[srcID])
+	nDst := n.g.Node(n.sToN[dstID])
 	if nSrc == nil || nDst == nil {
 		return fmt.Errorf("cannot connect stations %v to %v", nSrc, nDst)
 	}
@@ -73,28 +69,28 @@ func (n *Network) ConnectStations(src, dst *Station, duration float64) error {
 }
 
 // ValidateRoute checks if the given route is visitable in the given order.
-func (n *Network) ValidateRoute(route []int64) bool {
+func (n *Network) ValidateRoute(route []int64) (valid bool, reason error) {
 	if len(route) == 0 {
-		return false
+		return false, fmt.Errorf("route cannot be zero length")
 	}
-	if !n.allStationExist(route) {
-		return false
+	if ok, guilty := n.allStationExist(route); !ok {
+		return false, fmt.Errorf("station %d not in network", guilty)
 	}
-	for i, r := range route[1:] {
-		reach, err := n.CheckReachability(&Station{id: route[i]}, &Station{id: r})
+	for i, s := range route[1:] {
+		reach, err := n.CheckReachability(route[i], s)
 		if err != nil || !reach {
-			return false
+			return false, fmt.Errorf("cannot reach from %d to %d", route[i], s)
 		}
 	}
-	return true
+	return true, nil
 }
 
-func (n *Network) allStationExist(ids []int64) bool {
+func (n *Network) allStationExist(ids []int64) (ok bool, guilty int64) {
 	for _, id := range ids {
-		_, err := n.Station(id)
-		if err != nil {
-			return false
+		s, ok := n.Get(id)
+		if !ok {
+			return false, s
 		}
 	}
-	return true
+	return true, 0
 }
