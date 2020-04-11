@@ -1,6 +1,9 @@
 package ride
 
-import "testing"
+import (
+	"testing"
+	"github.com/amitlevy21/lets-go/network"
+)
 
 func TestCreateRoute(t *testing.T) {
 	r := route{stationsIds: []int64{1, 2, 3}}
@@ -8,19 +11,20 @@ func TestCreateRoute(t *testing.T) {
 }
 
 func TestEqualConsecutiveStaions(t *testing.T) {
-	var stationID = int64(3)
+	stationID := int64(3)
+	n := network.NewNetwork()
 	r := route{stationsIds: []int64{1, 2, 3}}
-	err := r.AddStation(stationID)
+	err := r.AddStation(stationID, &n)
 	if err == nil {
 		t.Error("adding same station twice in a row is forbidden")
 	}
 }
 
 func TestAddStation(t *testing.T) {
-	var stationID = int64(2)
+	stationID := int64(2)
+	n := network.NewNetwork()
 	r := route{stationsIds: []int64{1, 2, 3}}
-	err := r.AddStation(stationID)
-	if err != nil {
+	if err := r.AddStation(stationID, &n); err != nil {
 		t.Errorf("error while adding station: %s", err)
 	}
 	if r.stationsIds[len(r.stationsIds)-1] != stationID {
