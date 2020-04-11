@@ -13,37 +13,37 @@ const (
 
 var statusStr = []string{"pending", "ongoing", "finished", "cancelled"}
 
-type planned struct {
-	id             uint64
+type ride struct {
+	id             int64
 	rStatus        status
 	numPassengers  int32
 	availableSeats int32
-	crewMembersIds []uint64
+	crewMembersIds []int64
 	vehicle        int64
 	latestStation  int64
 }
 
-func (or *planned) start() error {
-	if or.rStatus != pending {
+func (r *ride) start() error {
+	if r.rStatus != pending {
 		return fmt.Errorf("ride already started")
 	}
-	or.rStatus = ongoing
+	r.rStatus = ongoing
 	return nil
 }
 
-func (or *planned) finish() error {
-	if or.rStatus == finished {
+func (r *ride) finish() error {
+	if r.rStatus == finished {
 		return fmt.Errorf("ride already finished")
 	}
-	if or.rStatus == cancelled {
+	if r.rStatus == cancelled {
 		return fmt.Errorf("cannot finish cancelled ride")
 	}
-	or.rStatus = finished
+	r.rStatus = finished
 	return nil
 }
 
-func (or *planned) cancel() error {
-	or.rStatus = cancelled
+func (r *ride) cancel() error {
+	r.rStatus = cancelled
 	return nil
 }
 

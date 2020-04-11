@@ -16,7 +16,7 @@ func TestCreateGraph(t *testing.T) {
 	if !g.HasEdgeFromTo(n1.ID(), n2.ID()) {
 		t.Errorf("graph not created as expected")
 	} else {
-		t.Logf("graph %v created!", g)
+		t.Logf("graph %#v created!", g)
 	}
 }
 
