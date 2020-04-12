@@ -28,13 +28,18 @@ jobs:
 
     - name: Build
       run: go build -v ./...
-  
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+
     - name: Test
       run: go test -v -coverprofile=coverage.out ./...
-    
+
     - name: Generate coverage file
       run: cat coverage.out
-    
+
     - name: Codecov
       uses: codecov/codecov-action@v1.0.6
       with:
