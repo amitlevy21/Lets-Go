@@ -14,8 +14,7 @@ func TestEqualConsecutiveStaions(t *testing.T) {
 	stationID := int64(3)
 	n := network.NewNetwork()
 	r := route{stationsIds: []int64{1, 2, 3}}
-	err := r.AddStation(stationID, &n)
-	if err == nil {
+	if err := r.AddStation(stationID, &n); err == nil {
 		t.Error("adding same station twice in a row is forbidden")
 	}
 }
