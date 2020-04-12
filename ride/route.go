@@ -11,7 +11,7 @@ type route struct {
 }
 
 type stationAdder interface {
-	AddStation(id int64) error
+	Add(id int64) error
 }
 
 func (r *route) AddStation(stationID int64, a stationAdder) error {
@@ -21,7 +21,7 @@ func (r *route) AddStation(stationID int64, a stationAdder) error {
 	}
 	// TODO create error handling types
 	// BODY use types like stationExist for more readable and relyable checks
-	if err := a.AddStation(stationID); err != nil && !strings.Contains(err.Error(), "exist") {
+	if err := a.Add(stationID); err != nil && !strings.Contains(err.Error(), "exist") {
 		return err
 	}
 	r.stationsIds = append(r.stationsIds, stationID)
