@@ -1,5 +1,5 @@
 // Copyright (c) 2020 Amit Levy
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -15,7 +15,7 @@ type coordinates struct {
 // Station is a stop for a ride
 // TODO Add NewStation function to unsure unique id
 type Station struct {
-	id       int64
+	ID       int64
 	location coordinates
 	rideIds  map[int64]bool
 }

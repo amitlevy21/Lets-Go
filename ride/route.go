@@ -1,5 +1,5 @@
 // Copyright (c) 2020 Amit Levy
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -10,17 +10,20 @@ import (
 	"strings"
 )
 
-type route struct {
+// Route is the order a ride visits stations.
+type Route struct {
 	id          int64
-	stationsIds []int64
+	StationsIds []int64
+	Schedules   []Schedule
 }
 
 type stationAdder interface {
 	Add(id int64) error
 }
 
-func (r *route) AddStation(stationID int64, a stationAdder) error {
-	last := r.stationsIds[len(r.stationsIds)-1]
+// AddStation adds a station to the route.
+func (r *Route) AddStation(stationID int64, a stationAdder) error {
+	last := r.StationsIds[len(r.StationsIds)-1]
 	if err := checkStationToItself(last, stationID); err != nil {
 		return err
 	}
@@ -29,7 +32,7 @@ func (r *route) AddStation(stationID int64, a stationAdder) error {
 	if err := a.Add(stationID); err != nil && !strings.Contains(err.Error(), "exist") {
 		return err
 	}
-	r.stationsIds = append(r.stationsIds, stationID)
+	r.StationsIds = append(r.StationsIds, stationID)
 	return nil
 }
 
