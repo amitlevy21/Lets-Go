@@ -1,5 +1,5 @@
 // Copyright (c) 2020 Amit Levy
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -11,7 +11,7 @@ import (
 )
 
 func TestCreateRide(t *testing.T) {
-	r := ride{
+	r := Ride{
 		rStatus:        pending,
 		numPassengers:  0,
 		availableSeats: 30,
@@ -24,7 +24,7 @@ func TestCreateRide(t *testing.T) {
 
 type testCase struct {
 	name     string
-	or       *ride
+	or       *Ride
 	fn       string
 	expected status
 	fail     bool
@@ -33,91 +33,91 @@ type testCase struct {
 var testCases = []testCase{
 	{
 		"newly with pending status",
-		&ride{},
+		&Ride{},
 		"",
 		pending,
 		false,
 	},
 	{
 		"start already started",
-		&ride{rStatus: ongoing},
+		&Ride{rStatus: ongoing},
 		"start",
 		ongoing,
 		true,
 	},
 	{
 		"start finished ride",
-		&ride{rStatus: finished},
+		&Ride{rStatus: finished},
 		"start",
 		finished,
 		true,
 	},
 	{
 		"start cancelled ride",
-		&ride{rStatus: cancelled},
+		&Ride{rStatus: cancelled},
 		"start",
 		cancelled,
 		true,
 	},
 	{
 		"start pending ride",
-		&ride{},
+		&Ride{},
 		"start",
 		ongoing,
 		false,
 	},
 	{
 		"finish finished ride",
-		&ride{rStatus: finished},
+		&Ride{rStatus: finished},
 		"finish",
 		finished,
 		true,
 	},
 	{
 		"finish pending ride",
-		&ride{},
+		&Ride{},
 		"finish",
 		finished,
 		false,
 	},
 	{
 		"finish cancelled ride",
-		&ride{rStatus: cancelled},
+		&Ride{rStatus: cancelled},
 		"finish",
 		cancelled,
 		true,
 	},
 	{
 		"finish ongoing ride",
-		&ride{rStatus: ongoing},
+		&Ride{rStatus: ongoing},
 		"finish",
 		finished,
 		false,
 	},
 	{
 		"cancel pending ride",
-		&ride{rStatus: pending},
+		&Ride{rStatus: pending},
 		"cancel",
 		cancelled,
 		false,
 	},
 	{
 		"cancel finished ride",
-		&ride{rStatus: finished},
+		&Ride{rStatus: finished},
 		"cancel",
 		cancelled,
 		false,
 	},
 	{
 		"cancel ongoing ride",
-		&ride{rStatus: ongoing},
+		&Ride{rStatus: ongoing},
 		"cancel",
 		cancelled,
 		false,
 	},
 	{
 		"cancel cancelled ride",
-		&ride{rStatus: cancelled},
+		&Ride{rStatus: cancelled},
 		"cancel",
 		cancelled,
 		false,
@@ -141,7 +141,7 @@ func TestRideStatus(t *testing.T) {
 	}
 }
 
-func fnFromStruct(r *ride, fn string) error {
+func fnFromStruct(r *Ride, fn string) error {
 	switch fn {
 	case "start":
 		return r.start()

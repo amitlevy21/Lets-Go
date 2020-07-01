@@ -1,5 +1,5 @@
 // Copyright (c) 2020 Amit Levy
-// 
+//
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
@@ -18,17 +18,20 @@ const (
 
 var statusStr = []string{"pending", "ongoing", "finished", "cancelled"}
 
-type ride struct {
-	id             int64
-	rStatus        status
-	numPassengers  int32
-	availableSeats int32
-	crewMembersIds []int64
-	vehicle        int64
-	latestStation  int64
+// Ride is a moving vehicle with passengers.
+type Ride struct {
+	id              int64
+	rStatus         status
+	numPassengers   int32
+	availableSeats  int32
+	crewMembersIds  []int64
+	vehicle         int64
+	latestStation   int64
+	Route           Route
+	VisitedStations []int64
 }
 
-func (r *ride) start() error {
+func (r *Ride) start() error {
 	if r.rStatus != pending {
 		return fmt.Errorf("ride already started")
 	}
@@ -36,7 +39,7 @@ func (r *ride) start() error {
 	return nil
 }
 
-func (r *ride) finish() error {
+func (r *Ride) finish() error {
 	if r.rStatus == finished {
 		return fmt.Errorf("ride already finished")
 	}
@@ -47,7 +50,7 @@ func (r *ride) finish() error {
 	return nil
 }
 
-func (r *ride) cancel() error {
+func (r *Ride) cancel() error {
 	r.rStatus = cancelled
 	return nil
 }
